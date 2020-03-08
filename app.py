@@ -16,9 +16,8 @@ class receiveWav(Resource):
         parse.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
         args = parse.parse_args()
         audioFile = args['file']
-        audioFile.save("song.mp3")
         scaler = pickle.load(open("scaler.ok","rb"))
-        x , sr = librosa.load("song.mp3",mono=True,duration=5)
+        x , sr = librosa.load(audioFile,mono=True,duration=5)
         y=x
         #Extract the features
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
@@ -34,6 +33,8 @@ class receiveWav(Resource):
         input_data2 = np.array([float(i) for i in features.split(" ")]).reshape(1,-1)
         input_data2 = scaler.transform(input_data2)
         return jsonify(input_data2.tolist())
+    def get(self):
+        return ("Try POST!")
   
   
 api.add_resource(receiveWav, '/receiveWav/sav') 
