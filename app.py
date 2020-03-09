@@ -17,6 +17,7 @@ class receiveWav(Resource):
         args = parse.parse_args()
         audioFile = args['file']
         app.logger.info(f'Audio file details {audioFile}')
+        print(f'Audio file details {audioFile}')
         scaler = pickle.load(open("scaler.ok","rb"))
         x , sr = librosa.load(audioFile,mono=True,duration=5)
         y=x
