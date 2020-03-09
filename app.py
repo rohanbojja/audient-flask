@@ -6,6 +6,9 @@ import os,pickle
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 import librosa
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__) 
 api = Api(app) 
@@ -17,7 +20,6 @@ class receiveWav(Resource):
         args = parse.parse_args()
         audioFile = args['file']
         app.logger.info(f'Audio file details {audioFile}')
-        print(f'Audio file details {audioFile}')
         scaler = pickle.load(open("scaler.ok","rb"))
         x , sr = librosa.load(audioFile,mono=True,duration=5)
         y=x
