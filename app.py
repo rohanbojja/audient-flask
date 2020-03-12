@@ -18,7 +18,7 @@ def upload():
         f = request.files['file']
         f.save("theFile.mp4")
         convertedfile = AudioSegment.from_file("theFile.mp4").export("theFile.wav", format="wav")
-        audioFile = open("thefile.wav")
+        #audioFile = open("thefile.wav")
         #app.logger.info(f'Audio file details {audioFile} {sf.available_formats()}')
         scaler = pickle.load(open("scaler.ok","rb"))
         x , sr = librosa.load("thefile.wav",mono=True,duration=5)
