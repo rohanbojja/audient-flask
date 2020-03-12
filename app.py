@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 import librosa
 import logging
 import soundfile as sf
+from pydub import AudioSegment
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -15,10 +16,12 @@ app = Flask(__name__)
 def upload():
     if(request.method == 'POST'):
         f = request.files['file']
-        audioFile = f
-        app.logger.info(f'Audio file details {audioFile} {sf.available_formats()}')
+        f.save("theFile.mp4")
+        convertedfile = AudioSegment.from_file("theFile.mp4").export("theFile.wav", format="wav")
+        audioFile = open("thefile.wav")
+        #app.logger.info(f'Audio file details {audioFile} {sf.available_formats()}')
         scaler = pickle.load(open("scaler.ok","rb"))
-        x , sr = librosa.load(audioFile,mono=True,duration=5)
+        x , sr = librosa.load("thefile.wav",mono=True,duration=5)
         y=x
         #Extract the features
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
