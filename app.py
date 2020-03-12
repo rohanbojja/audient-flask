@@ -7,6 +7,8 @@ import librosa
 import logging
 import soundfile as sf
 from pydub import AudioSegment
+import subprocess as sp
+
 
 #(['ffmpeg', '-y', '-i', 'theFile.mp4', '-acodec', 'pcm_s32le', '-vn', '-f', 'wav', '-'])
 
@@ -19,7 +21,8 @@ def upload():
     if(request.method == 'POST'):
         f = request.files['file']
         f.save("theFile.mp4")
-        convertedfile = AudioSegment.from_file("theFile.mp4",format="mp4").export("theFile.wav", format="wav")
+        #convertedfile = AudioSegment.from_file("theFile.mp4",format="mp4").export("theFile.wav", format="wav")
+        sp.call('ffmpeg -i theFile.mp4 theFile.wav -y')
         #audioFile = open("thefile.wav")
         #app.logger.info(f'Audio file details {audioFile} {sf.available_formats()}')
         scaler = pickle.load(open("scaler.ok","rb"))
