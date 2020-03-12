@@ -1,6 +1,4 @@
 from flask import Flask, jsonify, request
-from flask_restful import Resource, Api, reqparse
-import werkzeug
 import scipy.optimize
 import os,pickle
 import numpy as np
@@ -11,14 +9,12 @@ import logging
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__) 
-api = Api(app) 
 
-class receiveWav(Resource): 
-    def post(self):
-        parse = reqparse.RequestParser()
-        parse.add_argument('file', type=werkzeug.datastructures.FileStorage, location='files')
-        args = parse.parse_args()
-        audioFile = args['file']
+@app.route('/receiveWav',methods = ['POST'])
+def upload():
+    if(request.method == 'POST'):
+        f = request.files['file']
+        audioFile = f
         app.logger.info(f'Audio file details {audioFile}')
         scaler = pickle.load(open("scaler.ok","rb"))
         x , sr = librosa.load(audioFile,mono=True,duration=5)
@@ -37,14 +33,7 @@ class receiveWav(Resource):
         input_data2 = np.array([float(i) for i in features.split(" ")]).reshape(1,-1)
         input_data2 = scaler.transform(input_data2)
         return jsonify(input_data2.tolist())
-    def get(self):
-        return ("Try POST!")
-  
-  
-api.add_resource(receiveWav, '/receiveWav/sav') 
-  
   
 # driver function 
-if __name__ == '__main__': 
-  
+if __name__ == '__main__':   
     app.run(debug = True) 
