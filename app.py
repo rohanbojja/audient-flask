@@ -19,7 +19,7 @@ def upload():
     if(request.method == 'POST'):
         f = request.files['file']
         f.save("theFile.mp4")
-        convertedfile = AudioSegment.from_file("theFile.mp4").export("theFile.wav", format="wav")
+        convertedfile = AudioSegment.from_file("theFile.mp4",format="mp4").export("theFile.wav", format="wav")
         #audioFile = open("thefile.wav")
         #app.logger.info(f'Audio file details {audioFile} {sf.available_formats()}')
         scaler = pickle.load(open("scaler.ok","rb"))
