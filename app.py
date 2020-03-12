@@ -5,6 +5,7 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 import librosa
 import logging
+import soundfile as sf
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -15,7 +16,7 @@ def upload():
     if(request.method == 'POST'):
         f = request.files['file']
         audioFile = f
-        app.logger.info(f'Audio file details {audioFile}')
+        app.logger.info(f'Audio file details {audioFile} {sf.available_formats()}')
         scaler = pickle.load(open("scaler.ok","rb"))
         x , sr = librosa.load(audioFile,mono=True,duration=5)
         y=x
