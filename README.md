@@ -2,4 +2,6 @@
  A RESTful service to extract audio features froma file. flask-restful.
 
  ## TODO
- * Download audio data from GCP and extract features
+ * CLEAN UP CODE
+ * ADD AUTHENTICATION
+ * TIE UP AUTH WITH FIREBASE AUTH
