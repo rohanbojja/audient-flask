@@ -8,6 +8,8 @@ import logging
 import soundfile as sf
 from pydub import AudioSegment
 
+#(['ffmpeg', '-y', '-i', 'theFile.mp4', '-acodec', 'pcm_s32le', '-vn', '-f', 'wav', '-'])
+
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__) 
