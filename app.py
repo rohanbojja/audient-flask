@@ -8,9 +8,8 @@ import logging
 import soundfile as sf
 from pydub import AudioSegment
 import subprocess as sp
-
-
-#(['ffmpeg', '-y', '-i', 'theFile.mp4', '-acodec', 'pcm_s32le', '-vn', '-f', 'wav', '-'])
+import ffmpeg
+from io import BytesIO
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -20,13 +19,16 @@ app = Flask(__name__)
 def upload():
     if(request.method == 'POST'):
         f = request.files['file']
-        f.save("theFile.mp4")
-        #convertedfile = AudioSegment.from_file("theFile.mp4",format="mp4").export("theFile.wav", format="wav")
-        sp.call('ffmpeg -i theFile.mp4 theFile.wav -y',shell=True)
-        #audioFile = open("thefile.wav")
-        #app.logger.info(f'Audio file details {audioFile} {sf.available_formats()}')
+        app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
+        proc = (
+            ffmpeg.input('pipe:',format='mp4')
+            .output('pipe:', format='wav')
+            .run_async(pipe_stdin=True,pipe_stdout=True, pipe_stderr=True)
+        )
+        audioFile,err = proc.communicate(input=f.read())
+        audioFile =  BytesIO(audioFile)
         scaler = pickle.load(open("scaler.ok","rb"))
-        x , sr = librosa.load("theFile.wav",mono=True,duration=5)
+        x , sr = librosa.load(audioFile,mono=True,duration=5)
         y=x
         #Extract the features
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
