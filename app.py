@@ -18,13 +18,13 @@ app = Flask(__name__)
 def upload():
     if(request.method == 'POST'):
         f = request.files['file']
-        app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f.read()}')
+        #app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
         proc = (
             ffmpeg.input('pipe:')
             .output('pipe:', format='wav')
             .run_async(pipe_stdin=True,pipe_stdout=True, pipe_stderr=True)
         )
-        audioFile,err = proc.communicate(input=f.stream.read())
+        audioFile,err = proc.communicate(input=f.read())
         app.logger.info(f'AF : {audioFile}')
         audioFile =  BytesIO(audioFile)
         app.logger.info(f'AF : {audioFile}')
