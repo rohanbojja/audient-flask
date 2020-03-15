@@ -22,7 +22,7 @@ def upload():
         app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
         proc = (
             ffmpeg.input('pipe:',format='mp4')
-            .output('pipe:', format='wav')
+            .output('pipe:', format='aiff')
             .run_async(pipe_stdin=True,pipe_stdout=True, pipe_stderr=True)
         )
         audioFile,err = proc.communicate(input=f.read())
