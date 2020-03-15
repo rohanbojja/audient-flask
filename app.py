@@ -22,13 +22,13 @@ def upload():
         app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
         proc = (
             ffmpeg.input('pipe:')
-            .output('pipe:', format='aiff')
-            .run_async(pipe_stdin=True,pipe_stdout=True, pipe_stderr=True)
+            .output('theFile.wav', format='wav')
+            .run_async(pipe_stdin=True, pipe_stderr=True)
         )
         audioFile,err = proc.communicate(input=f.read())
         audioFile =  BytesIO(audioFile)
         scaler = pickle.load(open("scaler.ok","rb"))
-        x , sr = librosa.load(audioFile,mono=True,duration=5)
+        x , sr = librosa.load('theFile.wav',mono=True,duration=5)
         y=x
         #Extract the features
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
