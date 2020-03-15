@@ -21,10 +21,10 @@ def upload():
         app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
         proc = (
             ffmpeg.input('pipe:')
-            .output('pipe:', format='ogg')
+            .output('pipe:', format='wav')
             .run_async(pipe_stdin=True,pipe_stdout=True, pipe_stderr=True)
         )
-        audioFile,err = proc.communicate(input=f.read())
+        audioFile,err = proc.communicate(input=f.stream.read())
         app.logger.info(f'AF : {audioFile}')
         audioFile =  BytesIO(audioFile)
         app.logger.info(f'AF : {audioFile}')
