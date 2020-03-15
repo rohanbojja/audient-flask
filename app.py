@@ -18,7 +18,7 @@ app = Flask(__name__)
 def upload():
     if(request.method == 'POST'):
         f = request.files['file']
-        app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
+        app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f.read()}')
         proc = (
             ffmpeg.input('pipe:')
             .output('pipe:', format='wav')
