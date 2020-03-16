@@ -17,7 +17,7 @@ def upload():
         app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
         audioFile =  f
         scaler = pickle.load(open("scaler.ok","rb"))
-        x , sr = librosa.load(audioFile,mono=True,duration=5)
+        x , sr = librosa.load(audioFile,mono=True,duration=25)
         y=x
         #Extract the features
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
