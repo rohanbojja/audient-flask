@@ -5,10 +5,6 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 import librosa
 import logging
-import soundfile as sf
-import subprocess as sp
-import ffmpeg
-from io import BytesIO
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -18,16 +14,8 @@ app = Flask(__name__)
 def upload():
     if(request.method == 'POST'):
         f = request.files['file']
-        #app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
-        proc = (
-            ffmpeg.input('pipe:')
-            .output('pipe:', format='wav')
-            .run_async(pipe_stdin=True,pipe_stdout=True, pipe_stderr=True)
-        )
-        audioFile,err = proc.communicate(input=f.read())
-        app.logger.info(f'AF : {audioFile}')
-        audioFile =  BytesIO(audioFile)
-        app.logger.info(f'AF : {audioFile}')
+        app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
+        audioFile =  f
         scaler = pickle.load(open("scaler.ok","rb"))
         x , sr = librosa.load(audioFile,mono=True,duration=5)
         y=x
