@@ -8,7 +8,6 @@ import logging
 import tensorflow_hub as hub
 import tensorflow as tf
 import numpy as np
-import pandas as pd
 
 loc = "saved_models"
 model = tf.keras.models.load_model(loc,
