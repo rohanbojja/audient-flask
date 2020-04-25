@@ -5,10 +5,19 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 import librosa
 import logging
+import tensorflow_hub as hub
+import tensorflow as tf
+import numpy as np
+import pandas as pd
+
+loc = "saved_models"
+model = tf.keras.models.load_model(loc,
+custom_objects={'KerasLayer':hub.KerasLayer})
 
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__) 
+
 
 @app.route('/receiveWav',methods = ['POST'])
 def upload():
@@ -17,7 +26,7 @@ def upload():
         app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
         audioFile =  f
         scaler = pickle.load(open("scaler.ok","rb"))
-        x , sr = librosa.load(audioFile,mono=True,duration=25)
+        x , sr = librosa.load("f",mono=True,duration=25)
         y=x
         #Extract the features
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
@@ -32,7 +41,16 @@ def upload():
             features += f' {np.mean(e)}'
         input_data2 = np.array([float(i) for i in features.split(" ")]).reshape(1,-1)
         input_data2 = scaler.transform(input_data2)
-        return jsonify(input_data2.tolist())
+        tf_model_predictions = model.predict(input_data2)
+        genres = "Blues Classical Country Disco Hiphop Jazz Metal Pop Reggae Rock".split()
+        high=0
+        tf_model_predictions = tf_model_predictions[0]
+        res = {}
+        for i,e in enumerate(tf_model_predictions):
+        	app.logger.info(f'E : {e}')
+        	res[genres[i]] = str(e)
+       	app.logger.info(f'{res}')
+        return jsonify(res)
   
 # driver function 
 if __name__ == '__main__':   
