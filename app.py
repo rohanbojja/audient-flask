@@ -1,6 +1,5 @@
 from flask import Flask, jsonify, request
-import scipy.optimize
-import os,pickle
+import pickle
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 import librosa
