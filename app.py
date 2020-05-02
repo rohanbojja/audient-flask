@@ -14,8 +14,12 @@ custom_objects={'KerasLayer':hub.KerasLayer})
 
 logging.basicConfig(level=logging.DEBUG)
 
-app = Flask(__name__) 
+app = Flask(__name__)
 
+
+@app.route('/')
+def root():
+    return app.send_static_file('hostingstart.html')
 
 @app.route('/receiveWav',methods = ['POST'])
 def upload():
@@ -24,7 +28,7 @@ def upload():
         app.logger.info(f'AUDIO FORMAT\n\n\n\n\n\n\n\n\n\n: {f}')
         audioFile =  f
         scaler = pickle.load(open("scaler.ok","rb"))
-        x , sr = librosa.load("f",mono=True,duration=25)
+        x , sr = librosa.load(audioFile,mono=True,duration=25)
         y=x
         #Extract the features
         chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
@@ -52,4 +56,4 @@ def upload():
   
 # driver function 
 if __name__ == '__main__':   
-    app.run(debug = True) 
+    app.run(debug = True, host='0.0.0.0') 
