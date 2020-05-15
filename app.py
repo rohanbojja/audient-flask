@@ -42,10 +42,21 @@ def upload2():
                 zcr = librosa.feature.zero_crossing_rate(y)
                 rmse = librosa.feature.rms(y=y)
                 mfcc = librosa.feature.mfcc(y=y, sr=sr)
+                tempogram = librosa.feature.tempogram(y=y, sr=sr)
+                bpm = librosa.beat.tempo(y=y, sr=sr)
+                feat_arrays =[chroma_stft, spec_cent, spec_bw, rolloff, zcr, rmse, tempogram,bpm ]
+                #for stat in stats:
+                to_append = ''
+                k = ["_mean", "_median", "_sd", "_ptp", "_kurt", "_skew"]
+                for i in feat_arrays:
+                    to_append += f' {np.mean(i)} {np.median(i)} {np.std(i)} {np.ptp(i)}'  
+                
+                for i in mfcc:
+                    to_append += f' {np.mean(i)} {np.median(i)} {np.std(i)} {np.ptp(i)}' 
                 features = f'{np.mean(chroma_stft)} {np.mean(rmse)} {np.mean(spec_cent)} {np.mean(spec_bw)} {np.mean(rolloff)} {np.mean(zcr)}'    
                 for e in mfcc:
                     features += f' {np.mean(e)}'
-                input_data2 = np.array([float(i) for i in features.split(" ")]).reshape(1,-1)
+                input_data2 = np.array([float(i) for i in to_append.split(" ")]).reshape(1,-1)
                 input_data2 = scaler.transform(input_data2)
                 tf_model_predictions = model.predict(input_data2)
                 genres = "Blues Classical Country Disco Hiphop Jazz Metal Pop Reggae Rock".split()
