@@ -1,0 +1,10 @@
+sudo docker push rohanbojja/audient-flask-docker
+sudo docker run --publish 8080:5000 --name bb audient-flask-docker:latest
+sudo docker rm --force bb
+sudo docker build -t audient-flask-docker:latest .
+sudo docker tag audient-flask-docker:latest rohanbojja/audient-flask-docker:1.1
+
+
+
+ curl -X POST -F file=@iam.wav -F dur=5 http://audient.azurewebsites.net/receiveWavExp
+
