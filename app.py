@@ -28,14 +28,19 @@ def root():
 @app.route('/getPredictions',methods = ['POST'])
 def upload2():
     if(request.method == 'POST'):
+    
         f = request.files['file']
         dur = int(request.form["dur"]) # Duration, to be sent 
+        label_code = int(request.form["label_code"])
+        
         audioFile =  f
         
         ret_list = []
-        for cust_dur in range(1,dur):
+        
+        t=0
+        while(t<dur-1):
                 audioFile.seek(0)
-                x , sr = librosa.load(audioFile,mono=True,duration=cust_dur)
+                x , sr = librosa.load(audioFile,offset=t,mono=True,duration=5)
                 y=x
                 #Extract the features
                 chroma_stft = librosa.feature.chroma_stft(y=y, sr=sr)
@@ -48,7 +53,6 @@ def upload2():
                 tempogram = librosa.feature.tempogram(y=y, sr=sr)
                 bpm = librosa.beat.tempo(y=y, sr=sr)
                 feat_arrays =[chroma_stft, spec_cent, spec_bw, rolloff, zcr, rmse, tempogram,bpm ]
-                #for stat in stats:
                 k = ["_mean", "_median", "_sd", "_ptp", "_kurt", "_skew"]
                 to_append = ""
                 for i in feat_arrays:
@@ -60,15 +64,22 @@ def upload2():
                 #app.logger.info(f'{len(to_append.split(" "))}')
                 to_append2 = to_append.split(" ")[1:]
                 input_data2 = np.array([float(i) for i in to_append2]).reshape(1,-1)
+                
+                #Handle label_code here
+                
                 input_data2 = scaler.transform(input_data2)
                 tf_model_predictions = model.predict(input_data2)
+                
                 genres = "Blues Classical Country Disco Hiphop Jazz Metal Pop Reggae Rock".split()
+                
+                
                 high=0
                 tf_model_predictions = tf_model_predictions[0]
                 res = {}
                 for i,e in enumerate(tf_model_predictions):
                         res[genres[i]] = str(e)
                 ret_list.append(res)
+                t+=5
         return jsonify(ret_list)
   
 
