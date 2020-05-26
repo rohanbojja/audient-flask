@@ -8,14 +8,6 @@ import tensorflow_hub as hub
 import tensorflow as tf
 import numpy as np
 
-
-# Load necessary elements
-loc = "saved_models_best"
-model = tf.keras.models.load_model(loc,
-custom_objects={'KerasLayer':hub.KerasLayer})
-scaler = pickle.load(open("scaler_best.ok","rb"))
-
-
 logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
@@ -66,6 +58,14 @@ def upload2():
                 input_data2 = np.array([float(i) for i in to_append2]).reshape(1,-1)
                 
                 #Handle label_code here
+                if(label_code==0):
+                    loc = "saved_models_soa_hpf"
+                    model = tf.keras.models.load_model(loc)
+                    scaler = pickle.load(open("scaler_soa_hpf_gtzan.ok","rb"))
+                else:
+                    loc = "saved_models_soa_hpf"
+                    model = tf.keras.models.load_model(loc)
+                    scaler = pickle.load(open("scaler_soa_hpf_gtzan.ok","rb"))
                 
                 input_data2 = scaler.transform(input_data2)
                 tf_model_predictions = model.predict(input_data2)
