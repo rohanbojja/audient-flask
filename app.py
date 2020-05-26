@@ -59,19 +59,18 @@ def upload2():
                 
                 #Handle label_code here
                 if(label_code==0):
-                    loc = "saved_models_soa_hpf"
+                    loc = "saved_models_soa_hpf_gtzan"
                     model = tf.keras.models.load_model(loc)
                     scaler = pickle.load(open("scaler_soa_hpf_gtzan.ok","rb"))
+                    genres = "Blues Classical Country Disco Hiphop Jazz Metal Pop Reggae Rock".split()
                 else:
-                    loc = "saved_models_soa_hpf"
+                    loc = "saved_models_soa_hpf_custom"
                     model = tf.keras.models.load_model(loc)
-                    scaler = pickle.load(open("scaler_soa_hpf_gtzan.ok","rb"))
+                    scaler = pickle.load(open("scaler_soa_hpf_custom.ok","rb"))
+                    genres = ["Blues","Classical","Downtempo","EDM","Metal"]
                 
                 input_data2 = scaler.transform(input_data2)
                 tf_model_predictions = model.predict(input_data2)
-                
-                genres = "Blues Classical Country Disco Hiphop Jazz Metal Pop Reggae Rock".split()
-                
                 
                 high=0
                 tf_model_predictions = tf_model_predictions[0]
